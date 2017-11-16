@@ -1,5 +1,5 @@
 
-//My today song  awsome chrome extension
+//My today song  awesome chrome extension
 // Made by Santa B 2017
 
 $(document).ready(function () {
