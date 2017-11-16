@@ -1,10 +1,10 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
+  "update_url": "https://clients2.google.com/service/update2/crx",
 
   "manifest_version": 2,
   "name": "My today song super duper extension",
 	"description": "convert link to iframe . Enable you to play youtube links inside facebook",
-  "version": "0.2",
+  "version": "0.3",
   "content_scripts": [
     {
       "matches": [

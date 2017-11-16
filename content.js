@@ -9,8 +9,16 @@ $(document).ready(function () {
 		if (href == 'error') {
 			return;
 		}
+		
 		event.preventDefault();
-		$(this).replaceWith('<iframe   src="//www.youtube.com/embed/' + href + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
+		
+		// pause all curently playing youtube frames
+		$('.youtube_frame').each(function(){
+		this.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+	}
+
+	);
+		$(this).replaceWith('<iframe class="youtube_frame"  src="//www.youtube.com/embed/' + href + '?autoplay=1&enablejsapi=1" frameborder="0" allowfullscreen></iframe>');
 
 	});
 	function getId(url) {
@@ -23,5 +31,7 @@ $(document).ready(function () {
 			return 'error';
 		}
 	}
+	 
+  
 
 });
