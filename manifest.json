@@ -1,12 +1,14 @@
 {
-  "update_url": "https://clients2.google.com/service/update2/crx",
+   
 
   "manifest_version": 2,
-  "name": "My today song super duper extension",
-	"description": "convert link to iframe . Enable you to play youtube links inside facebook",
-  "version": "0.3",
+  "name": "MTS  play  youtube inside facebook",
+	"description": "Enable you to play youtube links inside facebook",
+  "version": "1.0.0",
+  "author":"Santa Bogdan <bogdansanta@live.com>",
   "content_scripts": [
     {
+      "run_at": "document_start",
       "matches": [
         "*://www.facebook.com/*"
       ],

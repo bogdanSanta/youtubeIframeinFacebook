@@ -1,4 +1,3 @@
-
 //My today song  awesome chrome extension
 // Made by Santa B 2017
 
@@ -9,18 +8,31 @@ $(document).ready(function () {
 		if (href == 'error') {
 			return;
 		}
-		
-		event.preventDefault();
-		
-		// pause all curently playing youtube frames
-		$('.youtube_frame').each(function(){
-		this.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-	}
 
-	);
-		$(this).replaceWith('<iframe class="youtube_frame"  src="//www.youtube.com/embed/' + href + '?autoplay=1&enablejsapi=1" frameborder="0" allowfullscreen></iframe>');
+		event.preventDefault();
+
+		// pause all curently playing youtube frames
+		$('.youtube_frame').each(function () {
+				this.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+			}
+
+		);
+		var element = document.createElement("iframe");
+
+		element.className = 'youtube_frame';
+		element.src = '//www.youtube.com/embed/' + href + '?autoplay=1&enablejsapi=1';
+		element.frameBorder = '0';
+
+		element.allowFullscreen = true;
+		element.width = '476';
+		element.height = '267';
+
+
+		var parent = $(this).closest(".userContentWrapper").find(".mtm");
+	          parent.replaceWith(element);
 
 	});
+
 	function getId(url) {
 		var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
 		var match = url.match(regExp);
@@ -31,7 +43,7 @@ $(document).ready(function () {
 			return 'error';
 		}
 	}
-	 
-  
+
+
 
 });
