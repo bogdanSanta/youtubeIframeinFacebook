@@ -1,49 +1,67 @@
-//My today song  awesome chrome extension
-// Made by Santa B 2017
-
-$(document).ready(function () {
-	$(document).on("click", 'a', function (event) {
-		var href = $(this).attr('href');
-		href = getId(href);
-		if (href == 'error') {
-			return;
-		}
-
-		event.preventDefault();
-
-		// pause all curently playing youtube frames
-		$('.youtube_frame').each(function () {
-				this.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-			}
-
-		);
-		var element = document.createElement("iframe");
-
-		element.className = 'youtube_frame';
-		element.src = '//www.youtube.com/embed/' + href + '?autoplay=1&enablejsapi=1';
-		element.frameBorder = '0';
-
-		element.allowFullscreen = true;
-		element.width = '476';
-		element.height = '267';
-
-
-		var parent = $(this).closest(".userContentWrapper").find(".mtm");
-	          parent.replaceWith(element);
-
-	});
-
-	function getId(url) {
-		var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-		var match = url.match(regExp);
-
-		if (match && match[2].length == 11) {
-			return match[2];
-		} else {
-			return 'error';
-		}
+ 
+	const YOUTUBE_PLAYER_BASE_URL = "https://www.youtube.com/embed/";
+	const YOUTUBE_PLAYER_PARAMS = {
+	  autoplay: 1,
+	  modestbranding: 1,
+	  enablejsapi: 1,
+	  origin: window.location.origin,
+	};
+	const YOUTUBE_VIDEO_ID_REGEX = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+	const YOUTUBE_PLAYER_SIZE = {
+	  width: "100%",
+	  height: "355px",
+	};
+  
+	function init() {
+	  $(document).on("click", "a", handleClick);
 	}
-
-
-
-});
+  
+	function handleClick(event) {
+	  const link = event.currentTarget;
+	  const videoId = getVideoId(link.href);
+  
+	  if (!videoId) return;
+  
+	  event.preventDefault();
+	  event.stopPropagation();
+  
+	  pauseAllPlayers();
+  
+	  const player = createPlayer(videoId);
+	  link.replaceWith(player);
+	}
+  
+	function getVideoId(url) {
+	  const match = url.match(YOUTUBE_VIDEO_ID_REGEX);
+	  return match ? match[1] : null;
+	}
+  
+	function createPlayer(videoId) {
+	  const player = document.createElement("iframe");
+	  player.src = createPlayerUrl(videoId);
+	  player.frameBorder = "0";
+	  player.allowFullscreen = true;
+	  player.title = "YouTube Video Player";
+	  player.setAttribute("aria-label", "Embedded YouTube Video Player");
+	  Object.assign(player.style, YOUTUBE_PLAYER_SIZE);
+  
+	  return player;
+	}
+  
+	function createPlayerUrl(videoId) {
+	  const params = Object.entries(YOUTUBE_PLAYER_PARAMS)
+		.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+		.join("&");
+	  return `${YOUTUBE_PLAYER_BASE_URL}${videoId}?${params}`;
+	}
+  
+	function pauseAllPlayers() {
+	  const players = document.querySelectorAll("iframe[src^='https://www.youtube.com/embed/']");
+  
+	  players.forEach((player) => {
+		player.contentWindow.postMessage(JSON.stringify({ event: "command", func: "pauseVideo" }), "*");
+	  });
+	}
+  
+	init();
+ 

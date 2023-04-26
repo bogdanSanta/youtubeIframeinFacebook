@@ -1,10 +1,10 @@
 {
    
 
-  "manifest_version": 2,
-  "name": "MTS  play  youtube inside facebook",
+  "manifest_version": 3,
+  "name": "TubeFace",
 	"description": "Enable you to play youtube links inside facebook",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author":"Santa Bogdan <bogdansanta@live.com>",
   "content_scripts": [
     {
